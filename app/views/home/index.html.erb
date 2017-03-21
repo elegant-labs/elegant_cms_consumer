@@ -1,4 +1,10 @@
 <h1>Welcome</h1>
 <p>This page should display content from the attached Elegant CMS addon</p>
 
-<%= debug @result %>
+<% unless @result.blank? %>
+	<pre>
+	  <%=  JSON.pretty_generate(@result) %>
+	</pre>
+<% else %>
+	<h3>ERROR: Elegant data could not be found!</h3>
+<% end %>
