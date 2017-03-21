@@ -4,11 +4,11 @@ class HomeController < ApplicationController
 		# Block to load our feed from Elegant CMS
 		begin
 			#build our URI, request and headers
-			elegant_uri = URI.parse(ELEGANT_URL)
+			elegant_uri = URI.parse(ENV['ELEGANT_URL'])
             http = Net::HTTP.new(elegant_uri.host, elegant_uri.port)
             http.read_timeout = 2
             request = Net::HTTP::Get.new(elegant_uri.request_uri)
-            request["Authorization"] = 'Token token=' + ELEGANT_KEY
+            request["Authorization"] = 'Token token=' + ENV['ELEGANT_KEY']
 
             #make the request and store the response
             response = http.request(request)
