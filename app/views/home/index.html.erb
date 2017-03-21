@@ -1,8 +1,22 @@
-<h1>Welcome</h1>
-<p>This page should display content from the attached Elegant CMS addon</p>
+<h1>Elegant CMS Client Example</h1>
+<p>See the whole feed in <%= link_to 'JSON', root_path(:format => :json) %></p>
 
 <% unless @result.blank? %>
-	<pre><%=  JSON.pretty_generate(@result) %></pre>
+	<% @result[:data].each do |content| %>
+		<hr>
+		<div id="<%= content[:id] %>">
+			<% content[:attributes][:fields].each do |field_type, field| %>
+				<% if field.is_a Hash %>
+					<h3><%= field[:name] %></h3>
+					<div>
+						<%= image_tag field[:url] unless field[:url].blank? %>
+					</div>
+				<% else %>
+					<h2><%= field %></h2>
+				<% end %>
+			<% end %>
+		</div>
+	<% end %>
 <% else %>
 	<h3>ERROR: Elegant data could not be found!</h3>
 <% end %>
