@@ -2,9 +2,7 @@
 <p>This page should display content from the attached Elegant CMS addon</p>
 
 <% unless @result.blank? %>
-	<pre>
-	  <%=  JSON.pretty_generate(@result) %>
-	</pre>
+	<pre><%=  JSON.pretty_generate(@result) %></pre>
 <% else %>
 	<h3>ERROR: Elegant data could not be found!</h3>
 <% end %>
