@@ -1,7 +1,7 @@
 <h1>Elegant CMS Client Example</h1>
 <p>See the whole feed in <%= link_to 'JSON', root_path(:format => :json) %></p>
 
-<% unless @result.blank? %>
+<% if @result.try(:[],:data).present? %>
 	<% @result[:data].each do |content| %>
 		<hr>
 		<div id="<%= content[:id] %>">
@@ -11,12 +11,24 @@
 					<div>
 						<%= image_tag field[:url] unless field[:url].blank? %>
 					</div>
+				<% elsif field.is_a? Array %>
+					<div style="margin-left: 20px; padding: 5px; border: 1px solid gray;">
+						<h4>Collection</h4>
+						<% field.each do |sub_field| %>
+							<h5><%= sub_field[:name] %></h5>
+							<div>
+								<%= image_tag sub_field[:url] unless sub_field[:url].blank? %>
+							</div>
+						<% end %>
+					</div>
 				<% else %>
 					<h2><%= field %></h2>
 				<% end %>
 			<% end %>
 		</div>
 	<% end %>
+<% elsif @result.try(:[],:errors).present? %>
+	<h3><%= @result[:errors] %></h3>
 <% else %>
 	<h3>ERROR: Elegant data could not be found!</h3>
 <% end %>

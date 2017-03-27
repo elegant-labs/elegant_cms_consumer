@@ -1,9 +1,14 @@
+require 'net/http'
 class HomeController < ApplicationController
 
 	# GET /index
 	# Action to load our feed from Elegant CMS and display it
 	def index
-		@result = load_elegant_data
+		unless ENV['ELEGANT_CMS_URL'].blank? || ENV['ELEGANT_CMS_TOKEN'].blank?
+			@result = load_elegant_data
+		else
+			@result = {:errors => "Invalid Configuration Variables!"}
+		end
 
 		respond_to do |format|
             format.html { render }
@@ -31,5 +36,6 @@ private
 		return JSON.parse(response.body).with_indifferent_access
 	rescue Exception => e
     	logger.error "HomeController::load_elegant_data: ERROR ELEGANT #{e.message}\n#{e.backtrace[0..5].join("\n")}"
+    	return {:errors => e.inspect}
 	end
 end
