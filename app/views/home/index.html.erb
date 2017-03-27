@@ -3,26 +3,34 @@
 
 <% if @result.try(:[],:data).present? %>
 	<% @result[:data].each do |content| %>
-		<hr>
-		<div id="<%= content[:id] %>">
+		<hr><br>
+		<h2>Content: <%= content[:id] %></h2>
+		<div id="<%= content[:id] %>" style="padding:10px 50px;">
 			<% content[:attributes][:fields].each do |field_type, field| %>
 				<% if field.is_a? Hash %>
-					<h3><%= field[:name] %></h3>
-					<div>
-						<%= image_tag field[:url] unless field[:url].blank? %>
+					<div style="padding: 5px; border: 1px solid gray;">
+						<h4><label><%= field_type %> Title:</label> <%= field[:title] %></h4>
+						<div>
+							<%= image_tag field[:url] unless field[:url].blank? %>
+						</div>
 					</div>
 				<% elsif field.is_a? Array %>
-					<div style="margin-left: 20px; padding: 5px; border: 1px solid gray;">
-						<h4>Collection</h4>
+					<div style="margin: 10px 50px; padding: 5px; border: 1px solid gray;">
+						<h4>Collection - <%= field_type %></h4>
 						<% field.each do |sub_field| %>
-							<h5><%= sub_field[:name] %></h5>
+							<h5><label>Object Title:</label> <%= sub_field[:title] %></h5>
 							<div>
 								<%= image_tag sub_field[:url] unless sub_field[:url].blank? %>
 							</div>
+							<% unless sub_field[:id].blank? %>
+								<label>Linked Content ID:</label> <%= sub_field[:id] %>
+							<% end %>
 						<% end %>
 					</div>
+				<% elsif field.is_a?(String) && "<" == field[0] %>
+					<div><%= raw field %></div>
 				<% else %>
-					<h2><%= field %></h2>
+					<h3><label><%= field_type %>:</label> <%= field %></h3>
 				<% end %>
 			<% end %>
 		</div>
